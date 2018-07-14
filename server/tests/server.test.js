@@ -15,20 +15,20 @@ describe('POST /todos', () => {
 
         request(app)
         .post('/todos')
-        .send({text})
+        .send({text})   // sending text:text es6 syntax that the text from variable up
         .expect(200)
         .expect((res) => {
            expect(res.body.text).toBe(text);
         })
-        .end((err, res) => {
+        .end((err, res) => {    // here not using done but we use err and response
            if (err) {
                return done(err);               
            }
 
-           Todo.find().then((todos) => {
+           Todo.find().then((todos) => {    // to collect the data same we do in MongoDB here over mongoose from database
              expect(todos.length).toBe(1);
              expect(todos[0].text).toBe(text);
-             done();
+             done();    // the close of finding the results
            }).catch((e) => done(e))
         });
     });
