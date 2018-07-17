@@ -2,6 +2,9 @@
 
 // mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost:27017/TodoApp');
+
+require('./config/config.js');
+
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
