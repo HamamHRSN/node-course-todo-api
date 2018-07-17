@@ -14,7 +14,7 @@ var {Todo} = require('./models/todo.js');
 
 
 var app = express();
-var port = process.env.PORT || 3000;
+var port = /*process.env.PORT ||*/ 3000;
 
 app.use(bodyParser.json());
 
@@ -65,6 +65,32 @@ Todo.findById(id).then((todo) => {
 
 });
 
+
+app.delete('/todos/:id', (req, res) => {
+
+    // get the id 
+
+    var id = req.params.id;
+
+
+    // validate the id -> not valid ? return (404) 
+      if (!ObjectID.isValid(id)) {
+        return  res.status(404).send();
+      }
+
+    // remove todo by id 
+       // success 
+       // error
+       // 400 with empty body
+       Todo.findByIdAndRemove(id).then((todo) => {
+           if (!todo) {
+            return  res.status(404).send();
+           }
+           res.send({todo});
+       }).catch( (e) => {
+           res.status(400).send();
+       });
+});
 
 
 app.listen(port, () => {
