@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 const {mongoose} = require('./db/mongoose.js');
 const {Todo} = require('./models/todo.js');
-// const {User} = require('./models/user.js');
+const {User} = require('./models/user.js');
  
 
 
@@ -118,6 +118,29 @@ app.patch('/todos/:id', (req, res) => {
         res.status(200).send({todo});
     }).catch((e) => {
         res.status(400).send();
+    });
+}); 
+
+
+app.post('/users', (req, res) => {
+    
+    var body = _.pick(req.body, ['email', 'password']);
+    // var user = new User({
+    //      email: req.body.email,
+    //      password: req.body.password
+    // });
+    var user = new User(body);
+
+    // User.findByToken
+    // user.generateAuthToken
+
+    user.save().then(() => {
+        // res.send(user);
+        return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user);
+    }).catch((e) => {
+        res.status(400).send(e);
     });
 });
 
